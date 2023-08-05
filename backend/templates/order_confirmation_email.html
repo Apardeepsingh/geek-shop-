@@ -1,0 +1,306 @@
+
+ {% load customTemplateFilters %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .mainDiv {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .innerDiv {
+        width: 63%;
+        margin: auto;
+        border: 1px solid #0000001a;
+      }
+      /* Media query for screens with a maximum width of 767px (adjust this value as needed) */
+      @media (max-width: 767px) {
+          .innerDiv {
+              width: 100%; /* Set the width to 100% for smaller screens */
+          }
+      }
+      .title {
+        border-bottom: 1px solid #0000001a;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+        padding: 16px;
+        font-family: Montserrat, sans-serif, Helvetica, Arial;
+      }
+      .confirmedHeading {
+        color: #4d4d4d;
+        border-bottom: 4px solid #2b3947;
+        display: inline-block;
+        padding-bottom: 3px;
+        font-family: Montserrat, sans-serif, Helvetica, Arial;
+        margin-bottom: 15px;
+      }
+      .contentBox {
+        color: #4d4d4d;
+        font-size: 14px;
+        font-family: Montserrat, sans-serif, Helvetica, Arial;
+      }
+      .content {
+        padding: 16px;
+        padding-top: 0;
+      }
+      .contentBox p {
+        display: block;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+      }
+      .shippingAddress {
+        margin-top: 40px;
+      }
+      .shippingAddress h3 {
+        font-size: 17px;
+        color: #4d4d4d;
+      }
+      .orderSummary {
+        padding: 8px;
+        padding-top: 24px;
+        padding-bottom: 10px;
+        color: #4d4d4d;
+        font-size: 14px;
+        font-family: Montserrat, sans-serif, Helvetica, Arial;
+        border: 10px solid #f2f2f2;
+      }
+      .orderSummary h3 {
+        font-size: 17px;
+        color: #4d4d4d;
+      }
+      .productsSection {
+        margin-top: 35px;
+      }
+      .productsSection .headings {
+        display: flex;
+        justify-content: center;
+        /* background: red; */
+        padding-top: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #0000001a;
+      }
+      .productsSection .headings div {
+        /* width: 100%; */
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .productsSection .headings .productHeading {
+        width: 80%;
+        /* background: pink; */
+      }
+      .productsSection .headings .amountHeading {
+        width: 20%;
+        /* background: lavender; */
+        /* text-align: center; */
+      }
+      .productsSection .products {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        font-size: 12px;
+      }
+      .productsSection .products .singleProduct {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 40px;
+      }
+      .productsSection .products .singleProduct .prodContent {
+        display: flex;
+        width: 80%;
+      }
+      .productsSection .products .singleProduct .prodImg {
+        width: 15%;
+        display: flex;
+        align-items: center;
+      }
+      .productsSection .products .singleProduct .prodDesc {
+        width: 85%;
+        padding-right: 20px;
+        padding-left: 10px;
+        padding-top: 5px;
+      }
+      .productsSection .products .singleProduct .productAmount {
+        width: 20%;
+      }
+      .amountCalculation {
+        display: flex;
+      }
+      .amountCalculation .temp {
+        width: 0%;
+      }
+      .amountCalculation .calculations {
+        width: 100%;
+      }
+      .amountCalculation .calculations .calculationCell {
+        display: flex;
+        width: 100%;
+      }
+      .amountCalculation .calculations .tag {
+        width: 50%;
+      }
+      .amountCalculation .calculations .subtotalAmount {
+        width: 50%;
+        font-weight: bold;
+      }
+      .cautionSection {
+        padding: 16px;
+        background: #f2f2f2;
+        color: #4d4d4d;
+        font-size: 14px;
+        font-family: Montserrat, sans-serif, Helvetica, Arial;
+      }
+      .cautionSection .cautionContent {
+        background: #dfdfdf;
+        padding: 12px;
+        padding-top: 16px;
+      }
+      .cautionSection .cautionContent p {
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="innerDiv">
+      <div class="title">
+        <h1>Geek Shop</h1>
+      </div>
+      <div class="content">
+        <div class="confirmedHeading">
+          <h2>
+            Order <br />
+            Confirmed
+          </h2>
+        </div>
+
+        <div class="contentBox">
+          <p>Hey {{ user.name }},</p>
+          <br />
+          <p >
+            Woohoo! Your order containing: {{order_items.0.product.product_name}} {% if order_items|length > 1 %} and {{order_items|length|add:"-1" }} more {% if order_items|length|add:"-1" > 1 %}items{% else %}item{% endif %} {% endif %} has been confirmed.
+          </p>
+          <br />
+
+          <p>
+            Now all you have to do is sit back and relax, while we work our
+            magic to get your order to you ASAP! We will keep you posted on the
+            movement of your order.
+          </p>
+          <br />
+
+          <p>
+            For more details, please go to
+            <a href="http://localhost:3000/my-orders" target="_blank">
+              My orders.</a
+            >
+          </p>
+          <br />
+
+          <p>
+            Thank you for shopping at geekshop.com. We hope you continue to
+            style with us!
+          </p>
+          <div class="shippingAddress">
+            <h3>Shipping/Billing Address:</h3>
+            <br />
+            <div class="address">
+              <p style="margin-bottom: 6px !important">{{order.shippingAddress.first_name}} {{order.shippingAddress.last_name}}</p>
+              <p style="margin: 0 !important">
+                H.No. {{order.shippingAddress.house_no}}, {{order.shippingAddress.street_name}}
+              </p>
+              <p
+                style="
+                  margin-bottom: 4px !important;
+                  margin-top: 16px !important;
+                "
+              >
+              {{order.shippingAddress.city}}-{{order.shippingAddress.postal_code}}
+              </p>
+              <p
+                style="margin-bottom: 4px !important; margin-top: 0 !important"
+              >
+              {{order.shippingAddress.state}}
+              </p>
+              <p style="margin: 0 !important">{{order.shippingAddress.country}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="orderSummary">
+        <h3>Order Summary</h3>
+        <h5 style="margin-top: 6px">Order Id: {{order.uid}}</h5>
+        <div class="productsSection">
+          <div class="headings">
+            <div class="productHeading">Product</div>
+            <div class="amountHeading">Amount</div>
+          </div>
+          <div class="products">
+            {% for item in order_items %}
+            <div class="singleProduct">
+              <div class="prodContent">
+                <div class="prodImg">
+                  <img style="width: 100%" src="http://127.0.0.1:8000{{ item.product.card_thumb_image }}" alt="" />
+                </div>
+                <div class="prodDesc">
+                  <p style="font-weight: bold">
+                    {{ item.product.product_name }}
+                  </p>
+                  <p style="margin-top: 5px">Size: {{ item.size_variant.size_name }} | Qty: {{ item.quantity }}</p>
+                </div>
+              </div>
+              <div class="productAmount">Rs. {{ item.product.price|add_prices:item.size_variant.price }}</div>
+            </div>
+            {% endfor %}
+            <div class="amountCalculation">
+              <div class="temp"></div>
+              <div class="calculations" style="padding-top: 24px">
+                <div class="calculationCell">
+                  <p class="tag" style="text-align: end">Subtotal:</p>
+                  <p class="subtotalAmount" style="text-align: end">Rs. {{ order_items|calculate_total_price }}</p>
+                </div>
+                <div class="calculationCell" style="margin-top: 12px">
+                  <p class="tag" style="text-align: end">Shipping Charges:</p>
+                  <p class="subtotalAmount" style="text-align: end">Rs. {{order.shippingPrice}}</p>
+                </div>
+                <div
+                  class="calculationCell"
+                  style="font-size: 18px; margin-top: 24px"
+                >
+                  <p class="tag" style="text-align: end; font-weight: bold">
+                    Payable Amount:
+                  </p>
+                  <p class="subtotalAmount" style="text-align: end">Rs. {{ order.totalPrice }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cautionSection">
+        <div class="cautionContent">
+          <h5 style="color: black; font-size: 12px; font-weight: bold">
+            CAUTION!
+          </h5>
+          <p>
+            Please do not share your Bewakoof password, OTP, Credit/Debit card
+            number and CVV or any other confidential information with anyone
+            even if he/she claims to be from Bewakoof.com. We advise our
+            customers to completely ignore such communications.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

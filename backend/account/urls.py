@@ -1,0 +1,30 @@
+from django.urls import path, include
+from account.views import UserRegistrationView, UserLoginView, UserProfileView, UserChangePassowrdView, SendPasswordResetEmailView, UserPasswordResetView, UserUpdateView, CartView,GetCartItemsView, DeleteCartItemView, AddressView, OrderView, updateCartView, OrderItemView, BankViews, CreateOrderApiView, TransactionApiView, TestmonialView, ReturnOrderView, CancelOrderView
+
+urlpatterns = [
+    path('register/', UserRegistrationView.as_view(), name='register'),
+    path('login/', UserLoginView.as_view(), name='login'),
+    path('profile/', UserProfileView.as_view(), name='profile'),
+    path('changepassword/', UserChangePassowrdView.as_view(), name='changepassword'),
+    path('send-password-reset-email/', SendPasswordResetEmailView.as_view(), name='send-password-reset-email'),
+    path('update-information/', UserUpdateView.as_view(), name='update-information'),
+    path('reset-password/<uid>/<token>', UserPasswordResetView.as_view(), name='reset-password'),
+    path('cart/<uid>', CartView.as_view(), name='add-to-cart'),
+    path('cart/', CartView.as_view(), name='apply-coupon'),
+    path('get-cart-items/', GetCartItemsView.as_view(), name='get-cart-items'),
+    path('delete-cart-item/<uid>', DeleteCartItemView.as_view(), name='delete-cart-items'),
+    path('delete-cart-item/', DeleteCartItemView.as_view(), name='delete-AllcartItems'),
+    path('update-cart-item/<uid>', updateCartView.as_view(), name='update-cart-items'),
+    path('address/', AddressView.as_view(), name='address'),
+    path('address/<uid>', AddressView.as_view(), name='single-address'),
+    path('bank-details/', BankViews.as_view(), name='bank-details'),
+    path('bank-details/<uid>', BankViews.as_view(), name='bank-details'),
+    path('order/', OrderView.as_view(), name='order'),
+    path('order/<uid>', OrderView.as_view(), name='get-order'),
+    path('update-order/<uid>', OrderItemView.as_view(), name='update-order'),
+    path('razorpay-order/', CreateOrderApiView.as_view(), name='razorpay-order'),
+    path('razorpay-order-complete/', TransactionApiView.as_view(), name='razorpay-order-complete'),
+    path('testimonial/', TestmonialView.as_view(), name='testimonial'),
+    path('return-order/', ReturnOrderView.as_view(), name='return-order'),
+    path('cancel-order/', CancelOrderView.as_view(), name='cancel-order'),
+]

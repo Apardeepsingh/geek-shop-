@@ -1,0 +1,61 @@
+
+.bannerContent .bannerBtn{
+    background-color: rgb(34, 34, 34);
+    border-radius: 0;
+    margin-top: 20px;
+}
+.bannerContent .bannerBtn:hover{
+    background-color: rgb(52, 52, 52);
+}
+
+
+/* for women section designing */
+
+.forMenGrid{
+    overflow: hidden;
+}
+.forMenGrid .forMenOverlayBox{
+    overflow: hidden;
+    position: relative;
+}
+.forMenGrid .forMenOverlayBox:hover img{
+    transform: scale(1.13);
+}
+
+.forMenImage{
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s ;
+}
+
+
+/* forWomen designing */
+.forWomenGrid{
+    overflow: hidden;
+}
+.forWomenGrid .forWomenOverlayBox{
+    overflow: hidden;
+    position: relative;
+}
+
+.forWomenGrid .forWomenOverlayBox:hover img{
+    transform: scale(1.13);
+}
+
+.forWomenImage{
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s ;
+}
+
+
+/* product slider navigation button setting */
+.react-multiple-carousel__arrow--left {
+    left: 0 !important;
+}
+
+.react-multiple-carousel__arrow--right {
+    right: 0 !important;
+}
+
+
