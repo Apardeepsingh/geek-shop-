@@ -369,7 +369,7 @@ const Search = () => {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/product/search/?search=${searchQuery}`
+          `https://apardeepsingh.pythonanywhere.com/product/search/?search=${searchQuery}`
         );
 
         let filteredProducts = response.data.filter((product) => {

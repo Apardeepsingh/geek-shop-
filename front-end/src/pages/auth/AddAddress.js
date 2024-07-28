@@ -39,7 +39,7 @@ const AddAddress = (props) => {
           Authorization: `Bearer ${access_token}`,
         };
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/user/address/${uid}`,
+          `https://apardeepsingh.pythonanywhere.com/api/user/address/${uid}`,
           { headers }
         );
         setClickedAddress(response.data);

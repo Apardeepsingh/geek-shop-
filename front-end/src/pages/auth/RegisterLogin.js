@@ -11,6 +11,10 @@ const TabPanel = (props) => {
   const { children, value, index } = props;
 
   useEffect(() => {
+    document.title = 'Login/Signup';
+  }, []);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
       window.scrollTo(0, 0);
     }
@@ -38,7 +42,7 @@ const RegisterLogin = () => {
       <ThemeProvider theme={theme}>
         <Grid
           container
-          sx={{ height: "90vh" }}
+          sx={{ height: "100%" }}
           bgcolor="#FAFAFA"
           justifyContent="center"
           py={5}

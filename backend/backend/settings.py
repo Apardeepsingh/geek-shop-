@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-9b2&_#y&jk(0t2z3ek@#$22iva@-$$j%s2vyodr9&4!-k6nk8w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -155,7 +157,7 @@ CKEDITOR_CONFIGS = {
         'toolbar': [
             ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight',
-                'JustifyBlock'],  
+                'JustifyBlock'],
             ['NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote'],
             ['Link', 'Unlink', 'Anchor'],
             ['Image', 'Table', 'HorizontalRule', 'SpecialChar'],
@@ -177,14 +179,23 @@ PASSWORD_RESET_TIMEOUT = 900  # 900sec = 15min
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://example.com",
-    "https://sub.example.com",
+    "https://web-production-1690.up.railway.app",
+    "https://geek-shop.netlify.app",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-production-1690.up.railway.app",
+    "https://geek-shop.netlify.app",
+]
+
 
 STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# Note: STATIC_ROOT is not used when using WhiteNoise for serving static files.
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

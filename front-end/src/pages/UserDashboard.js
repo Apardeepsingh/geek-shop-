@@ -97,7 +97,7 @@ const UserDashboard = () => {
           Authorization: `Bearer ${access_token}`,
         };
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/user/address/",
+          "https://apardeepsingh.pythonanywhere.com/api/user/address/",
           { headers }
         );
         setUserAddresses(response.data);
@@ -185,6 +185,11 @@ const UserDashboard = () => {
   const closeUserInfoForm = () => {
     setOpenUserInfo(false);
   };
+
+  useEffect(() => {
+    document.title = "My Account"
+
+  }, []);
 
   return (
     <motion.div
@@ -292,7 +297,7 @@ const UserDashboard = () => {
                                 }}
                                 variant="contained"
                                 component={NavLink}
-                                to="http://127.0.0.1:8000/admin/"
+                                to="https://apardeepsingh.pythonanywhere.com/admin/"
                                 target="_blank"
                               >
                                 Admin Dashboard
@@ -311,7 +316,7 @@ const UserDashboard = () => {
                                 }}
                                 variant="contained"
                                 component={NavLink}
-                                to="http://127.0.0.1:8000/admin/"
+                                to="https://apardeepsingh.pythonanywhere.com/admin/"
                                 target="_blank"
                               >
                                 Admin Dashboard
@@ -379,7 +384,7 @@ const UserDashboard = () => {
                               }}
                               variant="contained"
                               component={NavLink}
-                              to="http://127.0.0.1:8000/admin/"
+                              to="https://apardeepsingh.pythonanywhere.com/admin/"
                               target="_blank"
                             >
                               Admin Dashboard

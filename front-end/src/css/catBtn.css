@@ -65,6 +65,12 @@
   border-radius: 0px;
   /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
 }
+@media (max-width: 767px) {
+  .wishlistBtnContainer {
+    padding: 12px 0px 12px 0px; /* Set the desired padding for mobile screens */
+    gap: 4px;
+  }
+}
 
 .wishlistCheckboxBtn {
   display: none;

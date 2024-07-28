@@ -12,7 +12,7 @@ export const fetchCartData = createAsyncThunk(
   
       try {
         // Make your API request here to fetch the updated cart data
-        const response = await axios.get("http://127.0.0.1:8000/api/user/get-cart-items/", {
+        const response = await axios.get("https://apardeepsingh.pythonanywhere.com/api/user/get-cart-items/", {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },

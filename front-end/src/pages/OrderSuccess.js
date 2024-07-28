@@ -75,6 +75,11 @@ const OrderSuccess = () => {
     }
   });
 
+  
+  useEffect(() => {
+    document.title = "Order Placed";
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -268,7 +273,7 @@ const OrderSuccess = () => {
                       <TableBody>
                         {orderData.order_items
                           ? orderData.order_items.map((row) => {
-                            const imgUrl = `http://127.0.0.1:8000${row.product.card_thumb_image}`;
+                            const imgUrl = `https://apardeepsingh.pythonanywhere.com${row.product.card_thumb_image}`;
                             return (
                               <TableRow key={row.uid}>
                                 <TableCell width="45%">

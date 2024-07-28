@@ -48,7 +48,7 @@ const Orders = () => {
 
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/user/order/",
+          "https://apardeepsingh.pythonanywhere.com/api/user/order/",
           { headers }
         );
         setAllOrders(response.data);
@@ -84,6 +84,11 @@ const Orders = () => {
       setsortedOrders(sortedOrder);
     }
   }, [allOrders]);
+  
+  
+  useEffect(() => {
+    document.title = "My Orders";
+  }, []);
 
   return (
     <motion.div
@@ -155,7 +160,7 @@ const Orders = () => {
                           </Grid>
                         </Grid>
                         {order.order_items.map((orderItem, index) => {
-                          const thumbImgUrl = `http://127.0.0.1:8000${orderItem.product.card_thumb_image}`;
+                          const thumbImgUrl = `https://apardeepsingh.pythonanywhere.com${orderItem.product.card_thumb_image}`;
 
                           return (
                             <span key={orderItem.uid}>

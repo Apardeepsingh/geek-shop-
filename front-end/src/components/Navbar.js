@@ -793,10 +793,11 @@ const Navbar = (props) => {
           anchor="right"
           open={toggleDrawer}
           onClose={() => setToggleDrawer(false)}
-          sx={{zIndex: 99999}}
+          className="navDrawer"
+          sx={{ zIndex: 99999 }}
         >
           <>
-            <Box>
+            <Box sx={{width: '75vw'}}>
               <Box sx={{ px: 2, py: 2 }}>
                 <Typography fontWeight={800} fontSize={16}>
                   {access_token ? `Hello  ${userData.name} ` : "Hello User"}

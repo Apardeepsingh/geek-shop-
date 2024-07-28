@@ -43,6 +43,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import RefundBankInformation from "./auth/RefundBankInformation";
 import PreLoader from "../components/PreLoader";
 import React from "react";
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const SingleOrderItem = () => {
   const { orderId, orderItemId } = useParams();
@@ -79,7 +80,7 @@ const SingleOrderItem = () => {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/user/order/${orderId}`,
+          `https://apardeepsingh.pythonanywhere.com/api/user/order/${orderId}`,
           { headers }
         );
         setOrderData(response.data);
@@ -375,6 +376,12 @@ const SingleOrderItem = () => {
     setopenOrderReturnConfirmation(false);
   };
 
+
+  useEffect(() => {
+    document.title = "Order Id: " + orderId
+
+  }, []);
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -436,7 +443,7 @@ const SingleOrderItem = () => {
                       >
                         <img
                           width="100%"
-                          src={`http://127.0.0.1:8000${OrderItemData.product
+                          src={`https://apardeepsingh.pythonanywhere.com${OrderItemData.product
                             ? OrderItemData.product.card_thumb_image
                             : ""
                             }`}
@@ -3061,7 +3068,7 @@ const SingleOrderItem = () => {
                                 >
                                   <img
                                     width="100%"
-                                    src={`http://127.0.0.1:8000${remainingItem.product.card_thumb_image}`}
+                                    src={`https://apardeepsingh.pythonanywhere.com${remainingItem.product.card_thumb_image}`}
                                     alt=""
                                   />
                                 </Box>
@@ -3304,7 +3311,7 @@ const SingleOrderItem = () => {
                                 >
                                   <img
                                     width="100%"
-                                    src={`http://127.0.0.1:8000${remainingItem.product.card_thumb_image}`}
+                                    src={`https://apardeepsingh.pythonanywhere.com${remainingItem.product.card_thumb_image}`}
                                     alt=""
                                   />
                                 </Box>
@@ -3432,9 +3439,13 @@ const SingleOrderItem = () => {
             </DialogTitle>
             <DialogActions>
               <Button onClick={closeConfirmation}>Cancel</Button>
-              <Button onClick={cancelOrder} autoFocus>
-                Ok
-              </Button>
+              <LoadingButton
+                autoFocus
+                onClick={cancelOrder}
+                loading={isOrderCancellingLoading}
+              >
+                <span>Ok</span>
+              </LoadingButton>
             </DialogActions>
           </Dialog>
         ) : orderData.isPaid && orderData.refundBankDetails != null ? (
@@ -3455,9 +3466,13 @@ const SingleOrderItem = () => {
             </DialogTitle>
             <DialogActions>
               <Button onClick={closeConfirmation}>Cancel</Button>
-              <Button onClick={cancelOrder} autoFocus>
-                Ok
-              </Button>
+              <LoadingButton
+                autoFocus
+                onClick={cancelOrder}
+                loading={isOrderCancellingLoading}
+              >
+                <span>Ok</span>
+              </LoadingButton>
             </DialogActions>
           </Dialog>
         ) : (
@@ -3485,14 +3500,15 @@ const SingleOrderItem = () => {
               />
             </DialogContent>
             <DialogActions>
-              <Button
+              <LoadingButton
+                autoFocus
+                onClick={cancelOrder}
+                loading={isOrderCancellingLoading}
                 variant="contained"
                 size="large"
-                onClick={cancelOrder}
-                autoFocus
               >
-                Cancel Order
-              </Button>
+                <span>Cancel Order</span>
+              </LoadingButton>
             </DialogActions>
           </Dialog>
         )}
@@ -3523,17 +3539,18 @@ const SingleOrderItem = () => {
                 selectedBankAccount={selectedBankAccount}
               />
             </DialogContent>
-            <DialogActions>
+            <DialogActions sx={{ display: "flex", justifyContent: { xs: "center", md: "end" }, alignItems: "center" }}>
               {/* <Button onClick={closeReturnConfirmation}>Cancel</Button> */}
-              <Button
+
+              <LoadingButton
+                autoFocus
+                onClick={returnOrder}
+                loading={isOrderCancellingLoading}
                 variant="contained"
                 size="large"
-                disableElevation
-                onClick={returnOrder}
-                autoFocus
               >
-                Request Return
-              </Button>
+                <span>Request Return</span>
+              </LoadingButton>
             </DialogActions>
           </Dialog>
         ) : (
@@ -3555,9 +3572,15 @@ const SingleOrderItem = () => {
             </DialogTitle>
             <DialogActions>
               {/* <Button onClick={closeReturnConfirmation}>Cancel</Button> */}
-              <Button disableElevation onClick={returnOrder} autoFocus>
-                Ok
-              </Button>
+              <LoadingButton
+                autoFocus
+                onClick={returnOrder}
+                loading={isOrderCancellingLoading}
+                variant="contained"
+                size="large"
+              >
+                <span>Request Return</span>
+              </LoadingButton>
             </DialogActions>
           </Dialog>
         )}

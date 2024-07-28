@@ -1,7 +1,17 @@
 import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 
 const AboutUs = () => {
+  useEffect(() => {
+    document.title = 'About Us';
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
   return (
     <>
       <Grid container justifyContent="center" py={5}>
@@ -23,7 +33,7 @@ const AboutUs = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={11} md={6} sx={{py: {xs:2, md:12}, pr: {xs:0, md:12}}}>
+        <Grid item xs={11} md={6} sx={{ py: { xs: 2, md: 12 }, pr: { xs: 0, md: 12 } }}>
           <Typography variant="subtitle1" fontSize={17}>
             Welcome to Geek Shop, a clothing brand that is dedicated to
             providing high-quality and timeless fashion products that you can

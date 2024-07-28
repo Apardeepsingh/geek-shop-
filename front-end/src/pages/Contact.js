@@ -61,6 +61,12 @@ const Contact = () => {
     }
   }, []);
 
+
+  useEffect(() => {
+    document.title = "Contact Us";
+  }, []);
+
+
   return (
     <motion.div
       initial={{ opacity: 0 }}

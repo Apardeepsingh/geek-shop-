@@ -40,7 +40,7 @@ class ProductAdminForm(forms.ModelForm):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['uid', 'product_name', 'price', 'product_description']
+    list_display = ['uid', 'product_name', 'price']
     inlines = [ProductImageAdmin, SizeVariantAdmin]
     form = ProductAdminForm
 

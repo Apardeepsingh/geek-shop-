@@ -45,7 +45,7 @@ const Coupon = (props) => {
 
         try {
           const response = await axios.get(
-            "http://127.0.0.1:8000/api/user/order/",
+            "https://apardeepsingh.pythonanywhere.com/api/user/order/",
             { headers }
           );
 
@@ -94,7 +94,7 @@ const Coupon = (props) => {
   return (
     <>
       <Typography
-        sx={{ fontSize: 14, fontWeight: 600, mb: 3, px: "24px" }}
+        sx={{ fontSize: 14, fontWeight: 600, mb: 3, px: {md: "24px", xs: "12px"}  }}
         color="#00000091"
       >
         COUPONS
@@ -110,7 +110,7 @@ const Coupon = (props) => {
                   (!couponUsageCount[coupon.uid] || // Check if the coupon UID doesn't exist in the couponUsageCount object
                     couponUsageCount[coupon.uid] < coupon.coupon_count_peruser) ? (
                   <span>
-                    <Box px={3}>
+                    <Box sx={{ px: {md: "24px", xs: "12px"}}}>
                       <Stack
                         direction="row"
                         justifyContent="space-between"

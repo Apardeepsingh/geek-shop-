@@ -20,6 +20,7 @@ import axios from "axios";
 import ProductsSlider from "../components/ProductsSlider";
 import Carousel from "react-material-ui-carousel";
 import React from 'react';
+import PreLoader from "../components/PreLoader";
 
 function Item(props) {
 
@@ -37,9 +38,9 @@ function Item(props) {
           background: {
             xs: "black",
             sm: "black",
-            md: `url(${`http://127.0.0.1:8000${props.slide.billboard_image}`})`,
-            lg: `url(${`http://127.0.0.1:8000${props.slide.billboard_image}`})`,
-            xl: `url(${`http://127.0.0.1:8000${props.slide.billboard_image}`})`,
+            md: `url(${`https://apardeepsingh.pythonanywhere.com${props.slide.billboard_image}`})`,
+            lg: `url(${`https://apardeepsingh.pythonanywhere.com${props.slide.billboard_image}`})`,
+            xl: `url(${`https://apardeepsingh.pythonanywhere.com${props.slide.billboard_image}`})`,
           },
           backgroundRepeat: "no-repeat !important",
           backgroundSize: "cover !important",
@@ -135,6 +136,11 @@ const Category = () => {
     }
   }, [gender]);
 
+
+  useEffect(() => {
+    document.title = gender;
+  }, [gender]);
+
   useEffect(() => {
     if (billboardData) {
       const billboards = billboardData.filter((billboard) => {
@@ -151,7 +157,7 @@ const Category = () => {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/product/categories/`
+          `https://apardeepsingh.pythonanywhere.com/product/categories/`
         );
         const filterCats = response.data.filter((cat) => {
           return cat.is_for == gender || cat.is_for == "both";
@@ -172,132 +178,138 @@ const Category = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Grid container justifyContent="center">
-          <Grid item xs={12} md={11}>
-            <Box>
-              <Carousel
-                sx={{
-                  borderRadius: 0,
-                  // bgcolor: 'red'
-                }}
-                indicatorContainerProps={{
-                  style: {
-                    marginTop: "-24px", // 5
-                    paddingBottom: "0px", // 5
-                    position: "relative",
-                    zIndex: 1,
-                    bottom: "16px",
-                  },
-                }}
-              >
-                {homeBillBoards.map((slide, i) => (
-                  <Item key={i} slide={slide} />
-                ))}
-              </Carousel>
-            </Box>
-            <Box mt={3}>
-              <Typography
-                py={3}
-                textAlign="center"
-                variant="h1"
-                sx={{fontSize: {xs: 22, md:28}}}
-                fontWeight={600}
-              >
-                Shop By Categories
-              </Typography>
-              <Grid container sx={{ m: "0 !important" }} justifyContent='center'>
-                <Grid item xs={11.7} md={12}>
-                  <Grid container sx={{gap: {xs:1, md:2}}} >
-                    {menCategories.map((cat, index) => {
-                      let imgUrl = "";
-                      if (gender == "men") {
-                        imgUrl = `http://127.0.0.1:8000${cat.men_image}`;
-                      }
-                      if (gender == "women") {
-                        imgUrl = `http://127.0.0.1:8000${cat.women_image}`;
-                      }
+        {isLoading || isBillboardLoading ? (
+          <PreLoader />
+        ) : (
+          <>
+            <Grid container justifyContent="center">
+              <Grid item xs={12} md={11}>
+                <Box>
+                  <Carousel
+                    sx={{
+                      borderRadius: 0,
+                      // bgcolor: 'red'
+                    }}
+                    indicatorContainerProps={{
+                      style: {
+                        marginTop: "-24px", // 5
+                        paddingBottom: "0px", // 5
+                        position: "relative",
+                        zIndex: 1,
+                        bottom: "16px",
+                      },
+                    }}
+                  >
+                    {homeBillBoards.map((slide, i) => (
+                      <Item key={i} slide={slide} />
+                    ))}
+                  </Carousel>
+                </Box>
+                <Box mt={3}>
+                  <Typography
+                    py={3}
+                    textAlign="center"
+                    variant="h1"
+                    sx={{ fontSize: { xs: 22, md: 28 } }}
+                    fontWeight={600}
+                  >
+                    Shop By Categories
+                  </Typography>
+                  <Grid container sx={{ m: "0 !important" }} justifyContent='center'>
+                    <Grid item xs={11.7} md={12}>
+                      <Grid container sx={{ gap: { xs: 1, md: 2 } }} >
+                        {menCategories.map((cat, index) => {
+                          let imgUrl = "";
+                          if (gender == "men") {
+                            imgUrl = `https://apardeepsingh.pythonanywhere.com${cat.men_image}`;
+                          }
+                          if (gender == "women") {
+                            imgUrl = `https://apardeepsingh.pythonanywhere.com${cat.women_image}`;
+                          }
 
-                      return (
-                        <Grid item xs={5.8} md={3.9} key={index}>
-                          <Box
-                            overflow="hidden"
-                            position="relative"
-                            key={index}
-                            sx={{
-                              ":hover img": {
-                                transform: "scale(1.1)",
-                              },
-                              ":hover .catName": {
-                                color: "white",
-                              },
-                              ":hover .overlayBox": {
-                                height: "30%",
-                                backdropFilter: "blur(2px)",
-                              },
-                            }}
-                          >
-                            <CardActionArea
-                              component={NavLink}
-                              to={`/category/${gender}/${cat.slug}`}
-                            >
-                              <img
-                                src={imgUrl}
-                                srcSet={imgUrl}
-                                alt={cat.category_name}
-                                loading="lazy"
-                                style={{
-                                  display: "block",
-                                  width: "100%",
-                                  transition: "all 0.3s",
-                                }}
-                              />
+                          return (
+                            <Grid item xs={5.8} md={3.9} key={index}>
                               <Box
+                                overflow="hidden"
+                                position="relative"
+                                key={index}
                                 sx={{
-                                  background: "rgb(2,0,36)",
-                                  background:
-                                    "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7176995798319328) 37%, rgba(0,212,255,0) 100%)",
-                                  //   background: "#000000c4",
-                                  backdropFilter: "blur(1px)",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  mt: "-56px",
-                                  position: "absolute",
-                                  bottom: 0,
-                                  zIndex: 1,
-                                  height: "20%",
-                                  width: "100%",
-                                  transition: "all 0.3s",
+                                  ":hover img": {
+                                    transform: "scale(1.1)",
+                                  },
+                                  ":hover .catName": {
+                                    color: "white",
+                                  },
+                                  ":hover .overlayBox": {
+                                    height: "30%",
+                                    backdropFilter: "blur(2px)",
+                                  },
                                 }}
-                                className="overlayBox"
                               >
-                                <Typography
-                                  variant="subtitle1"
-                                  className="catName"
-                                  textAlign="center"
-                                  color="#ffffffc9"
-                                  sx={{ transition: "all 0.3s", fontSize: {xs:16, md:23} }}
+                                <CardActionArea
+                                  component={NavLink}
+                                  to={`/category/${gender}/${cat.slug}`}
                                 >
-                                  {cat.category_name}
-                                </Typography>
+                                  <img
+                                    src={imgUrl}
+                                    srcSet={imgUrl}
+                                    alt={cat.category_name}
+                                    loading="lazy"
+                                    style={{
+                                      display: "block",
+                                      width: "100%",
+                                      transition: "all 0.3s",
+                                    }}
+                                  />
+                                  <Box
+                                    sx={{
+                                      background: "rgb(2,0,36)",
+                                      background:
+                                        "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7176995798319328) 37%, rgba(0,212,255,0) 100%)",
+                                      //   background: "#000000c4",
+                                      backdropFilter: "blur(1px)",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      mt: "-56px",
+                                      position: "absolute",
+                                      bottom: 0,
+                                      zIndex: 1,
+                                      height: "20%",
+                                      width: "100%",
+                                      transition: "all 0.3s",
+                                    }}
+                                    className="overlayBox"
+                                  >
+                                    <Typography
+                                      variant="subtitle1"
+                                      className="catName"
+                                      textAlign="center"
+                                      color="#ffffffc9"
+                                      sx={{ transition: "all 0.3s", fontSize: { xs: 16, md: 23 } }}
+                                    >
+                                      {cat.category_name}
+                                    </Typography>
+                                  </Box>
+                                </CardActionArea>
                               </Box>
-                            </CardActionArea>
-                          </Box>
-                        </Grid>
-                      );
-                    })}
+                            </Grid>
+                          );
+                        })}
+                      </Grid>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Grid>
-            </Box>
+                </Box>
 
-            <ProductsSlider
-              title="Best Selling"
-              navigatedFrom={gender.charAt(0).toUpperCase() + gender.slice(1)}
-              isAutoPlay= {true}
-            />
-          </Grid>
-        </Grid>
+                <ProductsSlider
+                  title="Best Selling"
+                  navigatedFrom={gender.charAt(0).toUpperCase() + gender.slice(1)}
+                  isAutoPlay={true}
+                />
+              </Grid>
+            </Grid>
+          </>
+        )}
       </ThemeProvider>
     </>
   );

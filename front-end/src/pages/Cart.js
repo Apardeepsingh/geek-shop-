@@ -84,6 +84,7 @@ import React from "react";
 import HighlightOffTwoToneIcon from "@mui/icons-material/HighlightOffTwoTone";
 import CloseIcon from "@mui/icons-material/Close";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -99,9 +100,12 @@ const Accordion = styled((props) => (
   },
 }));
 
+
+
 const Cart = () => {
   const dispatch = useDispatch();
   const [isCartAvailableForCod, setisCartAvailableForCod] = useState(true)
+  const [isRazorPayLoading, setIsRazorPayLoading] = useState(false)
   const [Razorpay] = useRazorpay();
   const userData = useSelector((state) => state.user);
   const [quantity, setQuantity] = useState(0);
@@ -111,6 +115,7 @@ const Cart = () => {
   const [cartData, setCartData] = useState({});
   const [cartItemsData, setCartItemsData] = useState([]);
   const [cartItems, setCartItems] = useState({});
+  const [cartRemoveItemId, setCartRemoveItemId] = useState("")
   const [totalMRPCost, setTotalMRPCost] = useState(0);
   const [shippingCost, setTotalShippingCost] = useState(0);
   const [totalSellingCost, setTotalSellingCost] = useState(0);
@@ -139,7 +144,7 @@ const Cart = () => {
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [isOpenCoupons, setIsOpenCoupons] = useState(false);
   const [couponApplied, setCouponApplied] = useState({});
-  const [applyCoupon] = useApplyCouponToCartMutation();
+  const [applyCoupon, { isLoading: isApplyCouponLoading }] = useApplyCouponToCartMutation();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -337,6 +342,7 @@ const Cart = () => {
   };
 
   const removeCartItem = async (uid) => {
+    setCartRemoveItemId(uid)
     const res = await deleteItem({ access_token, uid });
 
     if (res.error) {
@@ -379,7 +385,7 @@ const Cart = () => {
           Authorization: `Bearer ${access_token}`,
         };
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/user/address/",
+          "https://apardeepsingh.pythonanywhere.com/api/user/address/",
           { headers }
         );
         setUserAddresses(response.data);
@@ -429,6 +435,10 @@ const Cart = () => {
     setSelectedPaymentMethod(paymentMethod);
   };
 
+  useEffect(() => {
+    document.title = 'My Cart';
+  }, []);
+
   // regarding stepper
   const steps = ["My Cart", "Shipping Address", "Payment"];
 
@@ -438,7 +448,7 @@ const Cart = () => {
         return (
           <Stack spacing={2}>
             {cartItemsData.map((cartItem, index) => {
-              const imgUrl = `http://127.0.0.1:8000${cartItem.product.card_thumb_image}`;
+              const imgUrl = `https://apardeepsingh.pythonanywhere.com${cartItem.product.card_thumb_image}`;
 
               const discountPercentage = parseInt(
                 ((cartItem.product.maximum_retail_price -
@@ -666,6 +676,7 @@ const Cart = () => {
                                       <Typography
                                         variant="subtitle1"
                                         color="error"
+                                        sx={{ ml: { xs: "4px !important", md: "16px !important" }, fontSize: { xs: "14px", md: "16px" } }}
                                       >
                                         *Only {cartItem.size_variant.stock} left
                                       </Typography>
@@ -692,37 +703,53 @@ const Cart = () => {
                             sx={{ display: { xs: "none", md: "flex" } }}
                             justifyContent="center"
                           >
-                            <span
-                              className="removeFromCart"
-                              onClick={() => {
-                                removeCartItem(cartItem.uid);
-                              }}
-                            >
-                              <Button color="primary" sx={{ width: "100%" }}>
-                                <svg
-                                  viewBox="0 0 448 512"
-                                  className="removeIcon"
+                            {
+                              isLoading && cartRemoveItemId == cartItem.uid ? <CircularProgress color="error" /> : (
+                                <span
+                                  className="removeFromCart"
+                                  onClick={() => {
+                                    removeCartItem(cartItem.uid);
+                                  }}
                                 >
-                                  <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
-                                </svg>
-                              </Button>
-                            </span>
+                                  <Button color="primary" sx={{ width: "100%" }}>
+                                    <svg
+                                      viewBox="0 0 448 512"
+                                      className="removeIcon"
+                                    >
+                                      <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
+                                    </svg>
+                                  </Button>
+                                </span>
+                              )
+                            }
+
                           </Grid>
 
                           {/* remove button for small screens  */}
-                          <IconButton
-                            onClick={() => {
-                              removeCartItem(cartItem.uid);
-                            }}
-                            sx={{
+                          {
+                            isLoading && cartRemoveItemId == cartItem.uid ? <CircularProgress sx={{
                               display: { xs: "block", md: "none" },
                               position: "absolute",
-                              top: 0,
-                              right: 0,
-                            }}
-                          >
-                            <CloseIcon />
-                          </IconButton>
+                              top: 10,
+                              right: 10,
+                              width: "20px !important",
+                              height: "20px !important"
+                            }} color="error" /> : (
+                              <IconButton
+                                onClick={() => {
+                                  removeCartItem(cartItem.uid);
+                                }}
+                                sx={{
+                                  display: { xs: "block", md: "none" },
+                                  position: "absolute",
+                                  top: 0,
+                                  right: 0,
+                                }}
+                              >
+                                <CloseIcon />
+                              </IconButton>
+                            )
+                          }
                         </Grid>
                       </Grid>
                     </Grid>
@@ -998,12 +1025,7 @@ const Cart = () => {
       }
       if (res.data) {
         console.log(res.data);
-        // if (!animate) {
-        //   setAnimate(true);
-        //   setTimeout(() => {
-        //     setAnimate(false);
-        //   }, 9000);
-        // }
+
         dispatch(incrementStateCount()); //changing state to refetch products in slider
         for (let i = 0; i < cartItemsData.length; i++) {
           let updatedStock =
@@ -1037,13 +1059,25 @@ const Cart = () => {
     }
   };
 
+
+  useEffect(() => {
+    if (isOrderLoading) {
+      if (!animate) {
+        setAnimate(true);
+        setTimeout(() => {
+          setAnimate(false);
+        }, 9000);
+      }
+    }
+  }, [isOrderLoading])
+
   const completePayment = (
     razorpay_payment_id,
     razorpay_order_id,
     razorpay_signature
   ) => {
     axios
-      .post("http://127.0.0.1:8000/api/user/razorpay-order-complete/", {
+      .post("https://apardeepsingh.pythonanywhere.com/api/user/razorpay-order-complete/", {
         payment_id: razorpay_payment_id,
         order_id: razorpay_order_id,
         signature: razorpay_signature,
@@ -1060,8 +1094,10 @@ const Cart = () => {
   };
 
   const razorpayPayment = () => {
+    setIsRazorPayLoading(true)
+
     axios
-      .post("http://127.0.0.1:8000/api/user/razorpay-order/", {
+      .post("https://apardeepsingh.pythonanywhere.com/api/user/razorpay-order/", {
         amount: parseInt(totalSellingCost),
         currency: "INR",
       })
@@ -1108,6 +1144,7 @@ const Cart = () => {
         });
 
         rzp1.open();
+        setIsRazorPayLoading(false)
       })
       .catch(function (error) {
         console.log(error);
@@ -1270,8 +1307,20 @@ const Cart = () => {
                           )}
                         </Stack>
                         {isCouponApplied ? (
-                          <Button
-                            variant="outlined"
+                          // <Button
+                          //   variant="outlined"
+                          //   sx={{
+                          //     borderRadius: "0px",
+                          //     width: "30% !important",
+                          //     fontWeight: 600,
+                          //   }}
+                          //   disableElevation
+                          //   color="primary"
+                          //   onClick={removeCoupon}
+                          // >
+                          //   Remove
+                          // </Button>
+                          <LoadingButton
                             sx={{
                               borderRadius: "0px",
                               width: "30% !important",
@@ -1280,9 +1329,11 @@ const Cart = () => {
                             disableElevation
                             color="primary"
                             onClick={removeCoupon}
+                            loading={isApplyCouponLoading}
+                            variant="outlined"
                           >
-                            Remove
-                          </Button>
+                            <span>Remove</span>
+                          </LoadingButton>
                         ) : (
                           <Button
                             variant="outlined"
@@ -1369,8 +1420,7 @@ const Cart = () => {
                           )}
                         </Stack>
                         {isCouponApplied ? (
-                          <Button
-                            variant="outlined"
+                          <LoadingButton
                             sx={{
                               borderRadius: "0px",
                               width: "30% !important",
@@ -1379,9 +1429,12 @@ const Cart = () => {
                             disableElevation
                             color="primary"
                             onClick={removeCoupon}
+                            loading={isApplyCouponLoading}
+                            variant="outlined"
                           >
-                            Remove
-                          </Button>
+                            <span>Remove</span>
+                          </LoadingButton>
+
                         ) : (
                           <Button
                             variant="outlined"
@@ -1567,23 +1620,61 @@ const Cart = () => {
                         ) : null}
                         {activeStep == 2 ? (
                           selectedPaymentMethod == "razorpay" ? (
-                            <Button
-                              startIcon={<AccountBalanceWalletIcon />}
-                              disableElevation
-                              sx={{
-                                width: "60%",
-                                py: "12px",
-                                letterSpacing: "1px",
-                                fontWeight: 500,
-                                fontSize: "15px",
-                                height: "63px",
-                              }}
-                              size="large"
-                              variant="contained"
-                              onClick={razorpayPayment}
-                            >
-                              Pay Now
-                            </Button>
+                            <>
+
+                              {/* <Button
+                                startIcon={<AccountBalanceWalletIcon />}
+                                disableElevation
+                                sx={{
+                                  width: "60%",
+                                  py: "12px",
+                                  letterSpacing: "1px",
+                                  fontWeight: 500,
+                                  fontSize: "15px",
+                                  height: "63px",
+                                }}
+                                size="large"
+                                variant="contained"
+                                onClick={razorpayPayment}
+                              >
+                                Pay Now
+                              </Button> */}
+                              <button
+                                className={`order ${animate ? "animate" : ""}`}
+                                onClick={razorpayPayment}
+                              >
+                                {
+                                  isRazorPayLoading ? <Box width='100%' height='100%' display='flex' justifyContent='center' alignItems='center'> <CircularProgress sx={{ position: "static !important" }} /> </Box> : (
+                                    <span
+                                      className="default"
+                                      style={{ textTransform: "uppercase" }}
+                                    >
+
+                                      Pay Now
+
+                                    </span>
+                                  )
+                                }
+
+                                <span
+                                  className="success"
+                                  style={{ textTransform: "uppercase" }}
+                                >
+                                  Order Placed
+                                </span>
+                                <div className="box"></div>
+                                <div className="truck">
+                                  <div className="back"></div>
+                                  <div className="front">
+                                    <div className="window"></div>
+                                  </div>
+                                  <div className="light top"></div>
+                                  <div className="light bottom"></div>
+                                </div>
+                                <div className="lines"></div>
+                              </button>
+
+                            </>
                           ) : (
                             <button
                               className={`order ${animate ? "animate" : ""}`}

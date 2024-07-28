@@ -24,7 +24,8 @@ import React from 'react';
 import PreLoader from "../components/PreLoader";
 
 function Item(props) {
-  const [imgUrl, setimgUrl] = useState(`http://127.0.0.1:8000${props.slide.billboard_image}`)
+  // console.log("props.slide.billboard_image")
+  const [imgUrl, setimgUrl] = useState(`https://apardeepsingh.pythonanywhere.com${props.slide.billboard_image}`)
 
   return (
     <Box
@@ -158,6 +159,11 @@ const Home = () => {
       window.scrollTo(0, 0);
     }
   }, []);
+
+  useEffect(() => {
+    document.title = "Home";
+  }, []);
+
 
   return (
     <motion.div

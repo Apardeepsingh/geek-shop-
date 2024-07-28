@@ -307,7 +307,7 @@ const Category_shop = () => {
       setIsLoading(true);
 
       try {
-        const response = await axios.get("http://127.0.0.1:8000/product/");
+        const response = await axios.get("https://apardeepsingh.pythonanywhere.com/product/");
 
         let cartegoryFilter = response.data.filter((product) => {
           const genderFilter = product.category.some(
@@ -502,6 +502,12 @@ const Category_shop = () => {
     "Tapered Fit",
     "Square Fit",
   ];
+
+  useEffect(() => {
+    document.title = `${category.replace(/-/g, ' ').toUpperCase()} for ${gender.toUpperCase()}`;
+  }, [category, gender]);
+
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -1129,7 +1135,7 @@ const Category_shop = () => {
                 <Grid container>
                   {allProducts.length > 0 ? (
                     allProducts.map((product) => {
-                      const backendBaseUrl = "http://127.0.0.1:8000";
+                      const backendBaseUrl = "https://apardeepsingh.pythonanywhere.com";
                       const cardThumbUrl = `${backendBaseUrl}${product.card_thumb_image}`;
 
                       const disocuntPercentage = parseInt(

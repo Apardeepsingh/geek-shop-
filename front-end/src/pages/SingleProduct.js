@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   Chip,
+  CircularProgress,
   Collapse,
   Dialog,
   DialogActions,
@@ -182,7 +183,7 @@ const SingleProduct = () => {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/product/${slug}`
+          `https://apardeepsingh.pythonanywhere.com/product/${slug}`
         );
         setProductData(response.data);
       } catch (error) {
@@ -230,7 +231,7 @@ const SingleProduct = () => {
 
   useEffect(() => {
     if (productData.product_images !== undefined) {
-      const baseUrl = "http://127.0.0.1:8000";
+      const baseUrl = "https://apardeepsingh.pythonanywhere.com";
 
       const data = productData.product_images;
 
@@ -443,6 +444,15 @@ const SingleProduct = () => {
   const closeReviewForm = () => {
     setopenReviewForm(false);
   };
+
+  useEffect(() => {
+    if (productData.product_name) {
+
+      document.title = productData.product_name
+    }
+
+  }, [productData.product_name]);
+
 
   return (
     <motion.div
@@ -973,44 +983,52 @@ const SingleProduct = () => {
                           </div>
                         </label>
                       </Button>
-                      {isAddToCart ? (
-                        <Button
-                          startIcon={<ShoppingBasketIcon />}
-                          component={NavLink}
-                          to="/cart"
-                          variant="contained"
-                          size="large"
-                          disableElevation
-                          color="primary"
-                          sx={{ borderRadius: "0px", width: "60%" }}
-                        >
-                          View Cart
-                        </Button>
-                      ) : (
-                        <Button
-                          startIcon={
-                            <>
-                              <Stack position="relative">
-                                <FontAwesomeIcon
-                                  className="product"
-                                  icon={faShirt}
-                                />
-                                <ShoppingCartIcon className="cart" />
-                              </Stack>
-                            </>
-                          }
-                          className="cartBtn "
-                          variant="contained"
-                          size="large"
-                          disableElevation
-                          color="primary"
-                          sx={{ borderRadius: "0px", width: "60%" }}
-                          onClick={handleAddToCartClick}
-                          disabled={stockValue == 0 ? true : false}
-                        >
-                          Add to Cart
-                        </Button>
-                      )}
+                      {
+                        isAddToCartLoading ? <Box width="60%" textAlign='center'> <CircularProgress /> </Box> : (
+                          <>
+                            {isAddToCart ? (
+                              <Button
+                                startIcon={<ShoppingBasketIcon />}
+                                component={NavLink}
+                                to="/cart"
+                                variant="contained"
+                                size="large"
+                                disableElevation
+                                color="primary"
+                                sx={{ borderRadius: "0px", width: "60%" }}
+                              >
+                                View Cart
+                              </Button>
+                            ) : (
+                              <Button
+                                startIcon={
+                                  <>
+                                    <Stack position="relative">
+                                      <FontAwesomeIcon
+                                        className="product"
+                                        icon={faShirt}
+                                      />
+                                      <ShoppingCartIcon className="cart" />
+                                    </Stack>
+                                  </>
+                                }
+                                className="cartBtn "
+                                variant="contained"
+                                size="large"
+                                disableElevation
+                                color="primary"
+                                sx={{ borderRadius: "0px", width: "60%" }}
+                                onClick={handleAddToCartClick}
+                                disabled={stockValue == 0 ? true : false}
+                              >
+                                Add to Cart
+                              </Button>
+                            )}
+                          </>
+                        )
+                      }
+
+
                     </Stack>
                   </>
                 )}
@@ -1033,56 +1051,85 @@ const SingleProduct = () => {
                 }}
               >
                 <Button
-                  startIcon={
-                    isWishlisted ? (
-                      <FavoriteIcon sx={{ color: "#D23F57" }} />
-                    ) : (
-                      <FavoriteBorderIcon />
-                    )
-                  }
-                  variant="outlined"
-                  size="small"
-                  disableElevation
-                  sx={{ borderRadius: "0px", py: "10px", width: "40%" }}
-                  onClick={() => {
-                    handleWishlistClick(productData);
+                  sx={{
+                    padding: "0px",
+                    width: "40%",
+                    borderRadius: "0px",
                   }}
+                  variant="outlined"
                 >
-                  {isWishlisted ? "Wishlisted" : "Wishlist"}
+                  <input
+                    type="checkbox"
+                    id="favorite"
+                    name="favorite-checkbox"
+                    value="favorite-button"
+                    className="wishlistCheckboxBtn"
+                    onChange={handleWishlistClick}
+                    checked={isAlreadyWishlisted}
+                  />
+                  <label
+                    htmlFor="favorite"
+                    className="wishlistBtnContainer"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-heart"
+                    >
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <div className="action">
+                      <span className="option-1" style={{ fontSize: "13px" }}>Wishlist</span>
+                      <span className="option-2" style={{ fontSize: "13px" }}>Added</span>
+                    </div>
+                  </label>
                 </Button>
-                {isAddToCart ? (
-                  <Button
-                    startIcon={<ShoppingBasketIcon />}
-                    component={NavLink}
-                    to="/cart"
-                    variant="contained"
-                    size="small"
-                    disableElevation
-                    sx={{ borderRadius: "0px", width: "60%" }}
-                  >
-                    View Cart
-                  </Button>
-                ) : (
-                  <Button
-                    startIcon={
-                      <>
-                        <Stack position="relative">
-                          <FontAwesomeIcon className="product" icon={faShirt} />
-                          <ShoppingCartIcon className="cart" />
-                        </Stack>
-                      </>
-                    }
-                    className="cartBtn "
-                    variant="contained"
-                    size="small"
-                    disableElevation
-                    sx={{ borderRadius: "0px", width: "60%" }}
-                    onClick={handleAddToCartClick}
-                    disabled={stockValue == 0 ? true : false}
-                  >
-                    Add to Cart
-                  </Button>
-                )}
+                {
+                  isAddToCartLoading ? <Box width="60%" textAlign='center'> <CircularProgress /> </Box> : (
+                    <>
+                      {isAddToCart ? (
+                        <Button
+                          startIcon={<ShoppingBasketIcon />}
+                          component={NavLink}
+                          to="/cart"
+                          variant="contained"
+                          size="small"
+                          disableElevation
+                          sx={{ borderRadius: "0px", width: "60%" }}
+                        >
+                          View Cart
+                        </Button>
+                      ) : (
+                        <Button
+                          startIcon={
+                            <>
+                              <Stack position="relative">
+                                <FontAwesomeIcon className="product" icon={faShirt} />
+                                <ShoppingCartIcon className="cart" />
+                              </Stack>
+                            </>
+                          }
+                          className="cartBtn "
+                          variant="contained"
+                          size="small"
+                          disableElevation
+                          sx={{ borderRadius: "0px", width: "60%" }}
+                          onClick={handleAddToCartClick}
+                          disabled={stockValue == 0 ? true : false}
+                        >
+                          Add to Cart
+                        </Button>
+                      )}
+                    </>
+                  )
+                }
               </Stack>
               <Divider sx={{ my: 3 }} />
               {isLoading ? (

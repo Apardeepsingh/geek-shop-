@@ -61,7 +61,7 @@ const ProductReviewFrom = (props) => {
 
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/user/order/",
+          "https://apardeepsingh.pythonanywhere.com/api/user/order/",
           { headers }
         );
         setAllOrders(response.data);
